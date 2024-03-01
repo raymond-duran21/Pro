@@ -71,11 +71,7 @@ import { DataTablePagination } from './Pagination'
           }
           className="max-w-sm absolute left-[300px]"
         />
-        <Button 
-        variant="default" 
-        className=" absolute right-[1100px] ml-auto max-w-sm">
-                Agregar
-        </Button>
+        
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

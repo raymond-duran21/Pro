@@ -8,6 +8,7 @@ import { DataTable } from "@/app/ui/components/Table/Datatable";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
+import CreateFormEmpleados from "@/app/ui/components/Form/Empleados/CreateFormEmpleados";
 
 
 const ListaEmpleados: React.FC = () => {
@@ -91,6 +92,7 @@ const ListaEmpleados: React.FC = () => {
     return ( 
       <div>
        <DataTable columns={columns} data={Data}/>
+       <CreateFormEmpleados/>
       </div>
   );
 };

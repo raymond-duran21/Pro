@@ -47,3 +47,11 @@ export interface Auditoria {
   usuario: string;
   fecha: Date
 }
+
+export interface CreateEmpleados {
+  nombre : string;
+  cedula_Pasaporte : string;
+  entidad: string;
+  direccion : string;
+  departamento : string;
+}

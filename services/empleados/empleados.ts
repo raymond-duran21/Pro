@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { Empleados,AllEmpleados } from "@/types/indes";
+import { Empleados,AllEmpleados, CreateEmpleados } from "@/types/indes";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 if (!apiUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
 
 
-export const CreateEmpleados = async (
-    data: Empleados
+export const CreateEmpleado = async (
+    data: CreateEmpleados
 ) => {
 
     try{ 

@@ -74,7 +74,7 @@ import { DataTablePagination } from './Pagination'
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="relative right-5">
               Columnas
             </Button>
             

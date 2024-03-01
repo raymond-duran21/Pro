@@ -53,7 +53,7 @@ const CreateFormEmpleados: FC<CreateFormProps> = () => {
       
       <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Agregar Empleado</Button>
+        <Button variant="outline" className=" absolute right-[1050px] top-[15px]">Agregar Empleado</Button>
       </DialogTrigger>
         <DialogContent className="sm:max-w-[525px]">
           <DialogHeader>

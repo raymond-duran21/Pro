@@ -91,8 +91,8 @@ const ListaEmpleados: React.FC = () => {
       console.log();
     return ( 
       <div>
-       <DataTable columns={columns} data={Data}/>
        <CreateFormEmpleados/>
+       <DataTable columns={columns} data={Data}/>
       </div>
   );
 };

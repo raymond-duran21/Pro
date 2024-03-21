@@ -8,6 +8,9 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
 import { getAllEquipos } from "@/services/equipos/equipos";
+import CreateFormEquipos from "@/app/ui/components/Form/Equipos/CreateFormEquipos";
+import UpdateFormEquipos from "@/app/ui/components/Form/Equipos/UpdateFormEquipos";
+import DeleteDialogEquipos from "@/app/ui/components/Form/Equipos/DeleteFormEquipos";
 
 
 const ListaEquipos: React.FC = () => {
@@ -83,10 +86,6 @@ const ListaEquipos: React.FC = () => {
         header: 'Modelo',
       },
       {
-        accessorKey: 'almacenamiento',
-        header: 'Almacenamiento',
-      },
-      {
         accessorKey: 'memoria_Ram', 
         header: 'Memoria Ram',
       },
@@ -107,7 +106,7 @@ const ListaEquipos: React.FC = () => {
         header: 'Nombre Equipo',
       },
       {
-        accessorKey: 'empleadosId',
+        accessorKey: 'empleados_Cedula',
         header: 'Id Empleado Asignado',
       },
       {
@@ -115,14 +114,30 @@ const ListaEquipos: React.FC = () => {
         header: 'Observaciones',
       },
       {
+        accessorKey: 'estado',
+        header: 'Estado',
+      },
+      {
         accessorKey: 'fechaAsignacion',
         header: 'Fecha Asignacion',
-      }
+      },
+      {
+        id: 'actions',
+        header: 'Acciones',
+        cell: ({ row }) => (
+          <div className="flex gap-x-1 ">
+            <UpdateFormEquipos id={row.original.id}/>
+            <DeleteDialogEquipos id={row.original.id}/>
+          </div>
+        ),
+        enableSorting: false,
+      },
       ]
       console.log();
     return ( 
       <div>
-       <DataTable columns={columns} data={Data}/>
+        <CreateFormEquipos/>
+       <DataTable columns={columns} data={Data} filtro={"serial"} show={true}/>
       </div>
   );
 };

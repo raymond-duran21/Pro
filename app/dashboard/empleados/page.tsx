@@ -9,12 +9,14 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox"
 import CreateFormEmpleados from "@/app/ui/components/Form/Empleados/CreateFormEmpleados";
+import UpdateFormEmpleados from "@/app/ui/components/Form/Empleados/UpdateFormEmpleados";
+import DeleteDialogEmpleados from "@/app/ui/components/Form/Empleados/DeleteFormEmpleados";
 
 
 const ListaEmpleados: React.FC = () => {
     const [Data, setData] = useState<Empleados[]>([]);
+    const [Id, setId] = useState(0);
     const [loading, setLoading] = useState(true);
-
 
     useEffect(() => {
       const fetchData = async () => {
@@ -76,23 +78,30 @@ const ListaEmpleados: React.FC = () => {
         header: 'Cedula &/O Pasaporte',
       },
       {
-        accessorKey: 'entidad',
-        header: 'Entidad',
-      },
-      {
-        accessorKey: 'direccion',
-        header: 'Direccion',
+        accessorKey: 'puesto',
+        header: 'Puesto',
       },
       {
         accessorKey: 'departamento',
         header: 'Departamento',
-      }
+      },
+      {
+        id: 'actions',
+        header: 'Acciones',
+        cell: ({ row }) => (
+          <div className="flex gap-x-1 ">
+            <UpdateFormEmpleados id={row.original.id}/>
+            <DeleteDialogEmpleados id={row.original.id}/>
+          </div>
+        ),
+        enableSorting: false,
+      },
       ]
       console.log();
     return ( 
       <div>
-       <CreateFormEmpleados/>
-       <DataTable columns={columns} data={Data}/>
+      <CreateFormEmpleados />
+       <DataTable columns={columns} data={Data} filtro={"nombre"} show={true} />
       </div>
   );
 };

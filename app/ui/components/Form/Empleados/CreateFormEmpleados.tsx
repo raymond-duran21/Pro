@@ -13,38 +13,40 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { CreateEmpleado } from "@/services/empleados/empleados";
 import { CreateEmpleados, Empleados } from "@/types/indes";
+import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 
 interface CreateFormProps {
 }
 
 const CreateFormEmpleados: FC<CreateFormProps> = () => {
-  const [employeeData, setEmployeeData] = useState<CreateEmpleados>({
+  const [empleadoData, setempleadoData] = useState<CreateEmpleados>({
     nombre: "",
     cedula_Pasaporte: "",
-    entidad: "",
-    direccion: "",
+    puesto: "",
     departamento: "",
   });
+
+  
   const [isOpen, setIsOpen] = useState(false);
-  const [onClose, setOnClose] = useState(false);
+  const router = useRouter();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmployeeData({
-      ...employeeData,
+    setempleadoData({
+      ...empleadoData,
       [event.target.name]: event.target.value,
     });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    // Implement logic to create employee on server (e.g., using axios)
+    // Implement logic to create empleado on server (e.g., using axios)
     try {
-      const result = await CreateEmpleado(employeeData);
-      console.log("Employee created successfully:", result.data);
+      const result = await CreateEmpleado(empleadoData);
+      console.log("Empleado creado exitosamente:", result.data);
+      window.location.reload();
       setIsOpen(false);
     } catch (error) {
-      console.error("Error creating employee:", error);
+      console.error("Error creando empleado:", error);
     }
   };
 
@@ -53,7 +55,7 @@ const CreateFormEmpleados: FC<CreateFormProps> = () => {
       
       <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className=" absolute right-[1050px] top-[15px]">Agregar Empleado</Button>
+        <Button variant="outline" className="right-[1040px] top-4 relative">Agregar Empleado</Button>
       </DialogTrigger>
         <DialogContent className="sm:max-w-[525px]">
           <DialogHeader>
@@ -69,7 +71,7 @@ const CreateFormEmpleados: FC<CreateFormProps> = () => {
                 <Input
                   id="nombre"
                   name="nombre"
-                  value={employeeData.nombre}
+                  value={empleadoData.nombre}
                   onChange={handleChange}
                   className="col-span-3"
                 />
@@ -81,31 +83,19 @@ const CreateFormEmpleados: FC<CreateFormProps> = () => {
               <Input
                 id="cedula_Pasaporte"
                 name="cedula_Pasaporte"
-                value={employeeData.cedula_Pasaporte}
+                value={empleadoData.cedula_Pasaporte}
                 onChange={handleChange}
                 className="col-span-3"
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="entidad" className="text-right">
-                Entidad
+              <Label htmlFor="puesto" className="text-right">
+                Puesto
               </Label>
               <Input
-                id="entidad"
-                name="entidad"
-                value={employeeData.entidad}
-                onChange={handleChange}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="direccion" className="text-right">
-                Direccion
-              </Label>
-              <Input
-                id="direccion"
-                name="direccion"
-                value={employeeData.direccion}
+                id="puesto"
+                name="puesto"
+                value={empleadoData.puesto}
                 onChange={handleChange}
                 className="col-span-3"
               />
@@ -117,7 +107,7 @@ const CreateFormEmpleados: FC<CreateFormProps> = () => {
               <Input
                 id="departamento"
                 name="departamento"
-                value={employeeData.departamento}
+                value={empleadoData.departamento}
                 onChange={handleChange}
                 className="col-span-3"
               />
@@ -129,7 +119,7 @@ const CreateFormEmpleados: FC<CreateFormProps> = () => {
               Close
             </Button>
           </DialogClose>
-            <Button type="submit" className=" relative left-[120px]">Agregar Usuario</Button>
+            <Button type="submit" className="relative left-[120px]">Agregar Usuario</Button>
           </DialogFooter>
         </form>
       </DialogContent>

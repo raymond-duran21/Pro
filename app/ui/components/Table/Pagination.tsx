@@ -17,10 +17,12 @@ import {
    
   interface DataTablePaginationProps<TData> {
     table: Table<TData>
+    show:boolean
   }
    
   export function DataTablePagination<TData>({
     table,
+    show,
   }: DataTablePaginationProps<TData>) {
     return (
       <div className="flex items-center justify-between px-2">
@@ -29,6 +31,7 @@ import {
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="flex items-center space-x-6 lg:space-x-8">
+          {show &&(
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Rows per page</p>
             <Select
@@ -48,7 +51,7 @@ import {
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </div>)}
           <div className="flex w-[100px] items-center justify-center text-sm font-medium">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}

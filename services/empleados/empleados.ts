@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Empleados,AllEmpleados, CreateEmpleados } from "@/types/indes";
+import { Empleados,CreateEmpleados, UpdateEmpleado } from "@/types/indes";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 if (!apiUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
@@ -50,11 +50,11 @@ export const getEmpleadosById = async (
 
 export const UpdateEmpleados = async (
     id: Number,
-    data: Empleados
+    data: UpdateEmpleado
 ) => {
 
     try{ 
-      const result = await axios.put(
+      const result = await axios.patch(
         `${apiUrl}/Empleados/${id}`,
         {
             ...data,
@@ -68,8 +68,7 @@ export const UpdateEmpleados = async (
 };
 
 export const DeleteEmpleados = async (
-    id: Number,
-    data: Empleados
+    id: Number
 ) => {
 
     try{ 

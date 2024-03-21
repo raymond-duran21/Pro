@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { Equipos,AllEquipos } from "@/types/indes";
+import { Equipos, CreateEquipo, UpdateEquipo } from "@/types/indes";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 if (!apiUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
 
 
 export const CreateEquipos = async (
-    data: Equipos
+    data: CreateEquipo
 ) => {
 
     try{ 
@@ -40,7 +40,7 @@ export const getEquiposById = async (
 ) => {
   
     try {
-      const response = await axios.get<Equipos>(`${apiUrl}/Equipos/${id}`
+      const response = await axios.get<UpdateEquipo>(`${apiUrl}/Equipos/${id}`
       );
 
       return response.data ;
@@ -51,11 +51,11 @@ export const getEquiposById = async (
 
 export const UpdateEquipos = async (
     id: Number,
-    data: Equipos
+    data: UpdateEquipo
 ) => {
 
     try{ 
-      const result = await axios.put(
+      const result = await axios.patch(
         `${apiUrl}/Equipos/${id}`,
         {
             ...data,
@@ -70,7 +70,6 @@ export const UpdateEquipos = async (
 
 export const DeleteEquipos = async (
     id: Number,
-    data: Equipos
 ) => {
 
     try{ 

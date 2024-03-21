@@ -1,3 +1,4 @@
+import SessionAuthProvider from '@/context/SessionAuthProvider'
 import Navbar from '../ui/components/Navbar'
 import Sidebar from '../ui/components/Sidebar/Sidebar'
 

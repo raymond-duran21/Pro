@@ -27,20 +27,27 @@ import React from 'react'
 import { Input } from '@/components/ui/input'
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { DataTablePagination } from './Pagination'
+import UpdateFormEmpleados from '../Form/Empleados/UpdateFormEmpleados'
+import { Equipos } from '@/types/indes'
 
   interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    filtro: string
+    show: boolean
   }
    
   export function DataTable<TData, TValue>({
     columns,
     data,
+    filtro,
+    show,
   }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
+    const [filtering, setFiltering] = React.useState("")
 
     const table = useReactTable({
       columns,
@@ -53,33 +60,36 @@ import { DataTablePagination } from './Pagination'
       getFilteredRowModel: getFilteredRowModel(),
       onColumnVisibilityChange: setColumnVisibility,
       onRowSelectionChange: setRowSelection,
+      enableRowSelection: true,
       state: {
-      sorting,
+      sorting: sorting,
+        globalFilter: filtering,
         columnFilters,
         columnVisibility,
-        rowSelection}
+        rowSelection: rowSelection},
     })
-   
+    console.log(rowSelection)
+
     return (
       <div>
-        <div className="flex items-center py-4">
+        <div>
         <Input
           placeholder="Buscar..."
-          value={(table.getColumn("nombre")?.getFilterValue() as string) ?? ""}
+          value={filtering}
           onChange={(event) =>
-            table.getColumn("nombre")?.setFilterValue(event.target.value)
+            setFiltering(event.target.value)
           }
-          className="max-w-sm absolute left-[300px]"
+          className="max-w-sm absolute left-[265px] top-4"
         />
-        
-        <DropdownMenu>
+        {show &&(
+        <DropdownMenu >
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="relative right-5">
+            <Button variant="outline" className="max-w-sm absolute right-5 top-4">
               Columnas
             </Button>
             
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" >
             {table
               .getAllColumns()
               .filter(
@@ -101,8 +111,9 @@ import { DataTablePagination } from './Pagination'
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+      ) }
       </div>
-      <div className=" absolute rounded-md border w-[1600px] right-0 left-[300px]">
+      <div className="absolute rounded-md border w-[85%] top-[65px] left-[265px]">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -145,7 +156,7 @@ import { DataTablePagination } from './Pagination'
             )}
           </TableBody>
         </Table>
-        <DataTablePagination table={table} />
+        <DataTablePagination table={table} show={show}/>
     </div>
   </div>
     )

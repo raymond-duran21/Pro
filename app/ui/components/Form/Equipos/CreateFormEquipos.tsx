@@ -11,27 +11,13 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { CreateEmpleado, getAllEmpleados } from "@/services/empleados/empleados";
 import { CreateEquipos } from "@/services/equipos/equipos";
-import { CreateEquipo, Empleados } from "@/types/indes";
-import { useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { CreateEquipo } from "@/types/indes";
+import { FC, useState } from "react";
 import * as React from "react"
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
  
-import { cn } from "@/lib/utils"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 
 interface CreateFormProps {
 }
@@ -42,11 +28,17 @@ const CreateFormEquipos: FC<CreateFormProps> = () => {
     marca: "",
     modelo: "",
     serial: "",
-    almacenamiento: "",
+    codigo_Bienes_Nacionales: "",
+    codigo_Invi_Mived: "",
+    disco_Duro: "",
     memoria_Ram: "",
     procesador:"",
     so: "",
     nombre_Equipo: "",
+    dominio_Azure: "",
+    direccion: "",
+    departamento: "",
+    programas: "",
     empleados_Cedula: "",
     observaciones: "",
     estado:"",
@@ -58,15 +50,26 @@ const CreateFormEquipos: FC<CreateFormProps> = () => {
       [event.target.name]: event.target.value,
     });
   };
+  const handleChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setEquiposData({
+      ...equiposData,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
       const result = await CreateEquipos(equiposData);
-      console.log("Employee created successfully:", result.data);
-      window.location.reload();
-
+      if (result.flag === false) {
+        toast.error(result.message);
+        console.log(result.message);
+      }
+      else {
+        toast.success("Equipo creado exitosamente");
+        setTimeout(() => {window.location.reload();},2000);
+      }
     } catch (error) {
       console.error("Error creating employee:", error);
     }
@@ -77,16 +80,16 @@ const CreateFormEquipos: FC<CreateFormProps> = () => {
       
       <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="right-[1040px] top-4 relative">Agregar Equipo</Button>
+        <Button variant="outline" >Agregar Equipo</Button>
       </DialogTrigger>
-        <DialogContent className="sm:max-w-[525px]">
+        <DialogContent className=" sm:max-w-[925px] ">
           <DialogHeader>
             <DialogTitle>Agregar Equipo</DialogTitle>
             <DialogDescription>Introduzca los datos del Equipo.</DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit}>
-            <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
+          <form onSubmit={handleSubmit} >
+            <div className="grid gap-4 py-4 ">
+            <div className="col-span-3 sm:col-span-2 md:col-span-2">
                 <Label htmlFor="serial" className="text-right">
                   Serial
                 </Label>
@@ -102,13 +105,17 @@ const CreateFormEquipos: FC<CreateFormProps> = () => {
                 <Label htmlFor="tipo" className="text-right">
                   Tipo
                 </Label>
-                <Input
+                <select
                   id="tipo"
                   name="tipo"
                   value={equiposData.tipo}
-                  onChange={handleChange}
+                  onChange={handleChangeSelect}
                   className="col-span-3"
-                />
+                >
+                  <option value="Select">Select</option>
+                  <option value="CPU">CPU</option>
+                  <option value="Laptop">Laptop</option>
+                </select>
               </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="marca" className="text-right">
@@ -135,13 +142,37 @@ const CreateFormEquipos: FC<CreateFormProps> = () => {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="almacenamiento" className="text-right">
-                Almacenamiento
+              <Label htmlFor="codigo_Bienes_Nacionales" className="text-right">
+                Codigo Bienes Nacionales
               </Label>
               <Input
-                id="almacenamiento"
-                name="almacenamiento"
-                value={equiposData.almacenamiento}
+                id="codigo_Bienes_Nacionales"
+                name="codigo_Bienes_Nacionales"
+                value={equiposData.codigo_Bienes_Nacionales}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="codigo_Invi_Mived" className="text-right">
+                Codigo Invi/Mived
+              </Label>
+              <Input
+                id="codigo_Invi_Mived"
+                name="codigo_Invi_Mived"
+                value={equiposData.codigo_Invi_Mived}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="disco_Duro" className="text-right">
+                Disco Duro
+              </Label>
+              <Input
+                id="disco_Duro"
+                name="disco_Duro"
+                value={equiposData.disco_Duro}
                 onChange={handleChange}
                 className="col-span-3"
               />
@@ -190,6 +221,59 @@ const CreateFormEquipos: FC<CreateFormProps> = () => {
                 id="nombre_Equipo"
                 name="nombre_Equipo"
                 value={equiposData.nombre_Equipo}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="dominio_Azure" className="text-right">
+                Dominio
+              </Label>
+              <select
+                  id="dominio_Azure"
+                  name="dominio_Azure"
+                  value={equiposData.dominio_Azure}
+                  onChange={handleChangeSelect}
+                  className="col-span-3"
+                >
+                  <option value="Select">Select</option>
+                  <option value="Azure">Azure</option>
+                  <option value="Dominio">Dominio</option>
+                  <option value="Hibrido">Hibrido</option>
+                </select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="direccion" className="text-right">
+                Direccion
+              </Label>
+              <Input
+                id="direccion"
+                name="direccion"
+                value={equiposData.direccion}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="departamento" className="text-right">
+                Departamento
+              </Label>
+              <Input
+                id="departamento"
+                name="departamento"
+                value={equiposData.departamento}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="programas" className="text-right">
+                Programas
+              </Label>
+              <Input
+                id="programas"
+                name="programas"
+                value={equiposData.programas}
                 onChange={handleChange}
                 className="col-span-3"
               />

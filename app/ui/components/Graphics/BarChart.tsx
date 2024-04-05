@@ -10,7 +10,7 @@ const EchartsBarChart: React.FC = () => {
 
   useEffect(() => {
     const initChart = async () => {
-      const chartDom = document.getElementById('echarts-container') as HTMLDivElement;
+      const chartDom = document.getElementById('echarts-container-bar') as HTMLDivElement;
       setChartDom(chartDom);
 
       const response = await getAllAsignaciones();
@@ -55,7 +55,8 @@ const EchartsBarChart: React.FC = () => {
           }
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          
         },
         series: [
           {
@@ -76,7 +77,7 @@ const EchartsBarChart: React.FC = () => {
     initChart();
   }, []); // Empty dependency array to run only once on component mount
 
-  return <div id="echarts-container" style={{ width: '800px', height: '100px' }} className=' bg-slate-100' />;
+  return <div id="echarts-container-bar" style={{ width: '600px', height: '400px' }} className=' bg-slate-100' />;
 };
 
 export default EchartsBarChart;

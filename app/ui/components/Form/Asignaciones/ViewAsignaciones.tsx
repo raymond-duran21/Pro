@@ -17,6 +17,8 @@ import { DataTable } from "../../Table/Datatable";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ViewModel {
     cedula: string,
@@ -29,41 +31,38 @@ const ViewModelAsignaciones: FC<ViewModel> =({
 }) => {
     const [asignacionesData, setAsignacionesData] = useState<Asignaciones[]>([]);
     const [selectedAsignacion, setSelectedAsignacion] = useState<number | null>(null);
-    const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await getAsignacionesByCedula(cedula);
-            setAsignacionesData(response);
-            setSelectedAsignacion(response.length > 0 ? response[0].id : null);
-          } catch (error) {
-            console.error('Error al obtener datos de empleados:', error);
-          }
-        };
-        fetchData();
+        useEffect(() => {
+            const fetchData = async () => {
+              try {
+                const response = await getAsignacionesByCedula(cedula);
+                setAsignacionesData(response);
+                setSelectedAsignacion(response.length > 0 ? response[0].id : null);
+              } catch (error) {
+                console.error('Error al obtener datos de empleados:', error);
+              }
+            };
+            fetchData();
         }, [cedula]);
-
-          const handleSelectAsignacion = (itemId: number) => {
-            setSelectedAsignacion(itemId);
-            setSelectedCardId(itemId);
-            console.log(itemId) 
-          };
 
           const handleDelete = async () => {
             if (selectedAsignacion) {
-              const updatedData = asignacionesData.filter(
-                (item) => item.id == selectedAsignacion
-              );
               const result = await DeleteAsignaciones(selectedAsignacion);
-              console.log("Asignacion Eliminada Correctamente:",result);
-              window.location.reload();
+              if (result.flag === false) {
+                toast.error(result.message);
+                console.log(result.message);
+              }
+              else {
+                toast.success("Asignacion eliminada exitosamente");
+                setTimeout(() => {window.location.reload();},2000);
+              }
             } else {
               console.warn('No selected item to delete');
             }
           };
-          
+
     return(
+        
         <div>
         <Dialog>
       <DialogTrigger asChild>
@@ -79,50 +78,15 @@ const ViewModelAsignaciones: FC<ViewModel> =({
                 presione sobre el equipo que desea eliminar y luego,
                 el boton de debajo.</DialogDescription>
           </DialogHeader>
-          <div className=" relative w-[700px] h-[80px] bottom-[315px] right-[270px]">
-          {asignacionesData.length > 0 ? (
-            <Carousel className="absolute left-[500px] top-[150px] w-full max-w-xs">
-                <CarouselContent>
-                    {asignacionesData.map((item, index) => (
-                    <CarouselItem key={item.id}>
-                        <div className="p-1">
-                        <Card onClick={() => handleSelectAsignacion(item.id)}
-                                className={
-                                selectedCardId === item.id 
-                                  ? 'bg-red-400'
-                                  : ''
-                              }>
-                            <CardContent className="aspect-square items-center justify-center p-6">
-                            <p className=" text-xl font-semibold">{item.equipoId}</p>
-                            <p className=" text-xl font-semibold">{item.nombre_Equipo}</p>
-                            <p className=" text-xl font-semibold">{item.estado}</p>
-                            <p className=" text-xl font-semibold">{item.fecha_Asignacion.toString()}</p>
-                            <span className=" absolute text-xl font-light bottom-[50px]">{index + 1}</span>
-                            </CardContent>
-                        </Card>
-                        </div>
-                    </CarouselItem>
-                    ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-                </Carousel>
-                
-                ) : (
-                    <div className=" absolute left-[500px] top-[150px] w-full max-w-xs">
-                    <Card className="aspect-square items-center justify-center p-6">
-                    <CardContent>
-                        <h1 className=" text-xl font-bold">
-                        No tiene equipo asignado
-                        </h1>
-                        
-                        <p className="text-l font-medium absolute top-[150px]">
-                        Aún no se ha asignado ningún equipo a este usuario.
-                        </p>
-                    </CardContent>
-                    </Card>
-                    </div>
-                )}
+          <div className=" relative p-28 ">
+                    {asignacionesData.map((item, index) =>
+                            <>
+                            <p className="font-semibold">{item.tipo}</p>
+                            <p className="font-semibold">{item.equipoId}</p>
+                            <p className="font-semibold">{item.fecha_Asignacion.toString()}</p>
+                            <span className=" absolute font-light bottom-[50px]">{index + 1}</span>
+                            </>
+                    )}
           </div>
           <DialogFooter className=" absolute bottom-[90px] left-[370px]">
         <AlertDialog>

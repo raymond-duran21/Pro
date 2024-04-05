@@ -1,9 +1,14 @@
+'use client'
+
 import Login from './ui/components/Login';
 
-export default function Home() {
+const Home = () => {
+
   return (
-        <div>
-        <Login />
-        </div>
-  )
-}
+    <div>
+    <Login />
+    </div>
+  );
+};
+
+export default Home;

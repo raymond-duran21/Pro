@@ -11,17 +11,19 @@ import { Checkbox } from "@/components/ui/checkbox"
 import CreateFormEmpleados from "@/app/ui/components/Form/Empleados/CreateFormEmpleados";
 import UpdateFormEmpleados from "@/app/ui/components/Form/Empleados/UpdateFormEmpleados";
 import DeleteDialogEmpleados from "@/app/ui/components/Form/Empleados/DeleteFormEmpleados";
-import { getAllAsignaciones } from "@/services/asignaciones/asignaciones";
-import CreateFormAsignaciones from "@/app/ui/components/Form/Asignaciones/CreateFormAsignaciones";
+import { getAllAsignaciones, getAsignacionesByCedula } from "@/services/asignaciones/asignaciones";
+import CreateFormAsignaciones from "@/app/ui/components/Form/Asignaciones/CreateFormAsignaciones/CreateFormCpuLaptopAsignaciones";
 import ViewModelAsignaciones from "@/app/ui/components/Form/Asignaciones/ViewAsignaciones";
 import { useSession } from "next-auth/react";
+import { utils, writeFile } from 'xlsx';
+import SelectFormAsignaciones from "@/app/ui/components/Form/Asignaciones/SelectFormAsignaciones";
 
 
 const ListaAsignaciones: React.FC = () => {
     const [Data, setData] = useState<Empleados[]>([]);
+    const [asignacionesData, setAsignacionesData] = useState<Asignaciones[]>([]);
     const [Id, setId] = useState(0);
     const [loading, setLoading] = useState(true);
-    const session = useSession();
 
     useEffect(() => {
       const fetchData = async () => {
@@ -35,6 +37,18 @@ const ListaAsignaciones: React.FC = () => {
       };
       fetchData();
     }, []);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await getAllAsignaciones();
+          setAsignacionesData(response);
+        } catch (error) {
+          console.error('Error al obtener datos de empleados:', error);
+        }
+      };
+      fetchData();
+      }, []);
 
     const columns: ColumnDef<Empleados>[] = [
       
@@ -72,7 +86,7 @@ const ListaAsignaciones: React.FC = () => {
               variant="ghost"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              Serial
+              Nombre
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           )
@@ -91,16 +105,24 @@ const ListaAsignaciones: React.FC = () => {
         header: 'Acciones',
         cell: ({ row }) => (
           <div className="flex gap-x-1 ">
-            <CreateFormAsignaciones id={row.original.cedula_Pasaporte} nombre={row.original.nombre} departamento={row.original.departamento}/>
             <ViewModelAsignaciones cedula={row.original.cedula_Pasaporte} nombre={row.original.nombre}/>
+            <SelectFormAsignaciones id={row.original.cedula_Pasaporte} nombre={row.original.nombre} departamento={row.original.departamento}/>
           </div>
         ),
         enableSorting: false,
       },
       ]
-      console.log();
+
+      const handleExportToExcel = () => {
+        const worksheet = utils.json_to_sheet(asignacionesData);
+        const workbook = utils.book_new();
+        utils.book_append_sheet(workbook, worksheet, 'Employee Data');
+        writeFile(workbook, 'employee_data.xlsx'); 
+      };
+
     return ( 
       <div>
+       <Button onClick={handleExportToExcel} className=" bg-green-500">Export to Excel</Button>
        <DataTable columns={columns} data={Data} filtro={"nombre"} show={true}/>
       </div>
   );

@@ -15,6 +15,9 @@ import { CreateEmpleado } from "@/services/empleados/empleados";
 import { CreateEmpleados, Empleados } from "@/types/indes";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 interface CreateFormProps {
 }
@@ -39,12 +42,16 @@ const CreateFormEmpleados: FC<CreateFormProps> = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Implement logic to create empleado on server (e.g., using axios)
     try {
       const result = await CreateEmpleado(empleadoData);
-      console.log("Empleado creado exitosamente:", result.data);
-      window.location.reload();
-      setIsOpen(false);
+      if (result.flag === false) {
+        toast.error(result.message);
+        console.log(result.message);
+      }
+      else {
+        toast.success("Empleado creado exitosamente");
+        setTimeout(() => {window.location.reload();},2000);
+      }
     } catch (error) {
       console.error("Error creando empleado:", error);
     }
@@ -55,7 +62,7 @@ const CreateFormEmpleados: FC<CreateFormProps> = () => {
       
       <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="right-[1040px] top-4 relative">Agregar Empleado</Button>
+        <Button variant="outline" >Agregar Empleado</Button>
       </DialogTrigger>
         <DialogContent className="sm:max-w-[525px]">
           <DialogHeader>

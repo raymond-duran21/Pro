@@ -3,6 +3,7 @@ import {useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { getServerSession } from 'next-auth';
+import { toast } from 'react-toastify';
 
 const Login = () =>
  {
@@ -10,6 +11,8 @@ const Login = () =>
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
+    const { refresh } = useRouter();
+
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -23,12 +26,17 @@ const Login = () =>
 
 
         if (responseNextAuth?.error) {
-            setErrors(responseNextAuth.error.split(","));
-            return;
-          }
+        setErrors(responseNextAuth.error.split(","));
+        toast.error("Contraseña o Correo incorrecto.");
+        console.log(errors[0]);
+        return;
+        }
       
-          router.push("/dashboard");
-        };
+        toast.success("Bienvenido");
+        setTimeout(() => {router.push("/dashboard")},2000);
+        
+    };
+
 
     return (
         <div className="container mx-auto mt-60 ">

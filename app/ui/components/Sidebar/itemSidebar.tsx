@@ -1,40 +1,67 @@
 "use client";
-
-import { LucideIcon } from "lucide-react";
+import { ChevronDown, LucideIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
+import SubMenuItem from "./subitemSidebar";
 
 interface ISidebarItem {
     name: string;
     icon: LucideIcon;
     path: string;
+    items?: ISubItem[];
 }
+
+interface ISubItem {
+    name: string;
+    path: string;
+  }
 
 const ItemSidebar = ({item}:{item: ISidebarItem}) => {
 
-    const {name, icon: Icon, path} = item;
-
+    const { name, icon: Icon, items, path } = item;
+    const [expanded, setExpanded] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
 
-    const onClick = () =>{
-        router.push(path);
-    }
+    const onClick = () => {
+        if (items && items.length > 0) {
+            return setExpanded(!expanded);
+        }
 
-    const isActive = useMemo (() => {
-       return path === pathname;
-    },[path,pathname])
+        return router.push(path);
+    };
+
+    const isActive = useMemo(() => {
+        if (items && items.length > 0) {
+          if (items.find((item) => item.path === pathname)) {
+            setExpanded(true);
+            return true;
+          }
+        }
+
+        return path === pathname;
+    }, [items, path, pathname]);
 
     return(
-        <div className={`flex items-center space-x-5 p-6 rounded-lg hover:bg-sidebar-background cursor-pointer hover:text-sidebar-active ${isActive && "bg-sidebar-background text-sidebar-active"}` }
-         onClick={onClick}
-        >
-            <Icon size={18}/>
-            <p className="text-sm font-semibold">
-            {name}
-            </p>
+        <>
+      <div
+        className={`flex items-center p-3 rounded-lg hover: cursor-pointer hover:text-sidebar-active justify-between
+        ${isActive && "text-sidebar-active"}`}
+        onClick={onClick}
+      >
+        <div className="flex items-center space-x-2">
+          <Icon size={20} />
+          <p className="text-sm font-semibold">{name} </p>
         </div>
+        {items && items.length > 0 && <ChevronDown size={18}
+                                        className={expanded ? "rotate-180 duration-200" : ""} />}
+      </div>
+      {expanded && items && items.length > 0 && (
+        <div className="flex flex-col space-y-1 ml-10">
+          {items.map((item) => <SubMenuItem key={item.path} item={item} />)}
+        </div>
+      )}
+    </>
     );
 }
 

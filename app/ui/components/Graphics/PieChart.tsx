@@ -10,7 +10,7 @@ const EchartsPieChart: React.FC = () => {
 
   useEffect(() => {
     const initChart = async () => {
-      const chartDom = document.getElementById('echarts-container') as HTMLDivElement;
+      const chartDom = document.getElementById('echarts-container-pie') as HTMLDivElement;
       setChartDom(chartDom);
 
       const response = await getAllAsignaciones();
@@ -43,10 +43,6 @@ const EchartsPieChart: React.FC = () => {
         tooltip: {
           trigger: 'item',
         },
-        legend: {
-          orient: 'vertical',
-          left: 'left',
-        },
         series: [
           {
             name: 'Número de Equipos',
@@ -73,7 +69,7 @@ const EchartsPieChart: React.FC = () => {
     initChart();
   }, []); // Empty dependency array to run only once on component mount
 
-  return <div id="echarts-container" style={{ width: '800px', height: '400px' }} className='  bg-slate-100' />;
+  return <div id="echarts-container-pie" style={{ width: '900px', height: '600px' }} className='  bg-slate-50' />;
 };
 
 export default EchartsPieChart;

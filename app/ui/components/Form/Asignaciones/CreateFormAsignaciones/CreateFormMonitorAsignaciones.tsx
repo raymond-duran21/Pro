@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { CreateAsignacion } from "@/services/asignaciones/asignaciones";
 import { getAllEmpleados } from "@/services/empleados/empleados";
-import { AllEmpleados, CreateAsignaciones, Empleados, Equipos } from "@/types/indes";
+import { AllEmpleados, CreateAsignaciones, Empleados, Equipos, Monitor } from "@/types/indes";
 import { FC, useEffect, useState } from "react";
 import {
     Command,
@@ -32,49 +32,52 @@ import { cn } from "@/lib/utils";
 import { ArrowUpDown, PackagePlus } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DataTable } from "../../Table/Datatable";
+import { DataTable } from "../../../Table/Datatable";
 import React from 'react';
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { getAllMonitores } from "@/services/equipos/monitor";
+
 
 interface CreateFormProps {
     id: string;
     nombre:string;
     departamento:string;
+    tipo: string;
 }
     
 
-const CreateFormAsignaciones: FC<CreateFormProps> = ({
+const CreateFormMonitorAsignaciones: FC<CreateFormProps> = ({
     id,
     nombre,
     departamento,
+    tipo,
 }) => {
     const [asignacionesData, setasignacionesData] = useState<CreateAsignaciones>({
     empleadoId: id,
     nombreEmpleado: nombre,
     departamento: departamento,
+    tipo: tipo,
     equipoId: "",
-    nombre_Equipo: "",
   });
     const [equipoId, setEquipoId] = useState("");
-    const [nombre_Equipo, setNombreEquipo] = useState("");
-    const [DataEquipos, setDataEquipos] = useState<Equipos[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [selectedRows, setSelectedRows] = useState([]);
+    const [tipoEquipo, setTipoEquipo] = useState("");
+    const [DataEquipos, setDataEquipos] = useState<Monitor[]>([]);
     
 
     useEffect(() => {
         setasignacionesData((prevData) => ({
           ...prevData,
           equipoId: equipoId,
-          nombre_Equipo: nombre_Equipo,
+          tipo: tipoEquipo,
         }));
-      }, [equipoId, nombre_Equipo]);
+      }, [equipoId, tipoEquipo]);
 
     useEffect(() => {
         const fetchDataEquipos = async () => {
           try {
-            const response = await getAllEquipos();
+            const response = await getAllMonitores();
             setDataEquipos(response);
-            setLoading(false);
           } catch (error) {
             console.error('Error al obtener datos de empleados:', error);
           }
@@ -82,7 +85,7 @@ const CreateFormAsignaciones: FC<CreateFormProps> = ({
         fetchDataEquipos();
     }, []);
 
-    const columns: ColumnDef<Equipos>[] = [
+    const columns: ColumnDef<Monitor>[] = [
         {
           id: "select",
           header: ({ table }) => (
@@ -101,7 +104,7 @@ const CreateFormAsignaciones: FC<CreateFormProps> = ({
               onCheckedChange={(value: any) => {row.toggleSelected(!!value)
                 if (value) {
                   setEquipoId(row.original.serial);
-                  setNombreEquipo(row.original.nombre_Equipo);
+                  setTipoEquipo(row.original.tipo);
                   const rowData = row.original;
                   console.log("Valores de la fila seleccionada:", rowData);
                   // Realiza las acciones necesarias con los valores de la fila
@@ -124,7 +127,7 @@ const CreateFormAsignaciones: FC<CreateFormProps> = ({
                 variant="ghost"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
               >
-                Nombre
+                Serial
                 <ArrowUpDown className="ml-2 h-4 w-4" />
               </Button>
             )
@@ -133,10 +136,6 @@ const CreateFormAsignaciones: FC<CreateFormProps> = ({
         {
             accessorKey: 'tipo', //normal accessorKey
             header: 'Tipo',
-        },
-        {
-            accessorKey: 'nombre_Equipo',
-            header: 'Nombre Equipo',
         },
         {
             accessorKey: 'estado',
@@ -149,12 +148,21 @@ const CreateFormAsignaciones: FC<CreateFormProps> = ({
     console.log(asignacionesData)   
     try {
       const result = await CreateAsignacion(asignacionesData);
-      console.log("Asignacion creado exitosamente:", result.data);
-      window.location.reload();
+      if (result.flag === false) {
+        toast.error(result.message);
+        console.log(result.message);
+      }
+      else {
+        toast.success("Se ha asignado correctamente.");
+        setTimeout(() => {window.location.reload();},2000);
+      }
       
     } catch (error) {
       console.error("Error creando asignacion:", error);
     }
+
+    
+
   };
 
   return (
@@ -169,7 +177,7 @@ const CreateFormAsignaciones: FC<CreateFormProps> = ({
           <DialogContent className="absolute max-w-[1000px] h-[800px]">
           <DialogHeader>
             <DialogTitle>Asignar Equipo a {nombre}</DialogTitle>
-            <DialogDescription>Seleccione el equipo que desea asignarle al usuario</DialogDescription>
+            <DialogDescription>Seleccione el Monitor que desea asignarle al usuario</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit}>
           <div className=" relative w-[1000px] h-[100px] bottom-[315px] right-[270px]">
@@ -196,4 +204,4 @@ const CreateFormAsignaciones: FC<CreateFormProps> = ({
   );
 };
 
-export default CreateFormAsignaciones;
+export default CreateFormMonitorAsignaciones;

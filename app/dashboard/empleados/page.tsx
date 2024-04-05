@@ -12,7 +12,6 @@ import CreateFormEmpleados from "@/app/ui/components/Form/Empleados/CreateFormEm
 import UpdateFormEmpleados from "@/app/ui/components/Form/Empleados/UpdateFormEmpleados";
 import DeleteDialogEmpleados from "@/app/ui/components/Form/Empleados/DeleteFormEmpleados";
 
-
 const ListaEmpleados: React.FC = () => {
     const [Data, setData] = useState<Empleados[]>([]);
     const [Id, setId] = useState(0);
@@ -56,6 +55,10 @@ const ListaEmpleados: React.FC = () => {
         enableHiding: false,
       },
       {
+        accessorKey: 'id',
+        header: 'Id',
+      },
+      {
         accessorKey: 'nombre',
         header: ({ column }) => {
           return (
@@ -68,10 +71,6 @@ const ListaEmpleados: React.FC = () => {
             </Button>
           )
         },
-      },
-      {
-        accessorKey: 'id',
-        header: 'Id',
       },
       {
         accessorKey: 'cedula_Pasaporte', //normal accessorKey
@@ -97,7 +96,6 @@ const ListaEmpleados: React.FC = () => {
         enableSorting: false,
       },
       ]
-      console.log();
     return ( 
       <div>
       <CreateFormEmpleados />

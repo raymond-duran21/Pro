@@ -14,6 +14,8 @@ import { DeleteEmpleados } from "@/services/empleados/empleados";
 import { DeleteEquipos } from "@/services/equipos/equipos";
 import { UserX } from "lucide-react";
 import { FC } from "react"
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
   interface DeleteFormProps {
@@ -28,11 +30,16 @@ import { FC } from "react"
     const handleSubmit = async () => {
         try {
           const result = await DeleteEquipos(id);
-          console.log("Empleado Eliminado Correctamente:",result);
-          window.location.reload();
+          if (result.flag === false) {
+            toast.error(result.message);
+            console.log(result.message);
+          }
+          console.log("Equipo Eliminado Correctamente:",result);
+          toast.success("Equipo Eliminado Correctamente");
+          setTimeout(() => {window.location.reload();},2000);
           
         } catch (error) {
-          console.error("Error Eliminando empleado:", error);
+          console.error("Error Eliminando equipo:", error);
         }
       };
 
@@ -46,10 +53,10 @@ import { FC } from "react"
     </AlertDialogTrigger>
     <AlertDialogContent>
         <AlertDialogHeader>
-        <AlertDialogTitle>Estas seguro que quieres eliminar este empleado?</AlertDialogTitle>
+        <AlertDialogTitle>Estas seguro que quieres eliminar este equipo?</AlertDialogTitle>
         <AlertDialogDescription>
         Esta acción no se puede deshacer. Esto eliminará permanentemente 
-        el Empleado y eliminará sus datos de nuestros servidores.
+        el equipo y eliminará sus datos de nuestros servidores.
         </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

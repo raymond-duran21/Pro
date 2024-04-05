@@ -16,6 +16,8 @@ import { CreateEmpleados, Empleados, UpdateEmpleado } from "@/types/indes";
 import { PenSquareIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface UpdateFormProps {
     id: number,
@@ -55,8 +57,14 @@ const UpdateFormEmpleados: FC<UpdateFormProps> = ({
     event.preventDefault();
     try {
       const result = await UpdateEmpleados(employeeData.id, employeeData);
-      console.log("Empleado Actualizado successfully:", result.data);
-      window.location.reload();
+      if (result.flag === false) {
+        toast.error(result.message);
+        console.log(result.message);
+      }
+      else {
+        toast.success("Empleado Actualizado exitosamente");
+        setTimeout(() => {window.location.reload();},2000);
+      }
     } catch (error) {
       console.error("Error Actualizando empleado:", error);
     }

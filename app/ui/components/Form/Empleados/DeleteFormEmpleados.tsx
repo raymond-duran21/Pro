@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { DeleteEmpleados } from "@/services/empleados/empleados";
 import { UserX } from "lucide-react";
 import { FC } from "react"
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
   interface DeleteFormProps {
@@ -27,8 +29,14 @@ import { FC } from "react"
     const handleSubmit = async () => {
         try {
           const result = await DeleteEmpleados(id);
-          console.log("Empleado Eliminado Correctamente:",result);
-          window.location.reload();
+          if (result.flag === false) {
+            toast.error(result.message);
+            console.log(result.message);
+          }
+          else {
+            toast.success("Empleado eliminado exitosamente");
+            setTimeout(() => {window.location.reload();},2000);
+          }
         } catch (error) {
           console.error("Error Eliminando empleado:", error);
         }

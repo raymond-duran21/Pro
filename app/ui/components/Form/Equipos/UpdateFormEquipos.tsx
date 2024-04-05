@@ -16,6 +16,9 @@ import { UpdateEquipos, getEquiposById } from "@/services/equipos/equipos";
 import { UpdateEquipo } from "@/types/indes";
 import { PenSquareIcon } from "lucide-react";
 import { FC, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 interface UpdateFormProps {
     id: number,
@@ -30,6 +33,10 @@ const UpdateFormEquipos: FC<UpdateFormProps> = ({
     memoria_Ram: "",
     so: "",
     nombre_Equipo: "",
+    dominio_Azure: "",
+    direccion: "",
+    departamento: "",
+    programas: "",
     observaciones: "",
   });
 
@@ -50,7 +57,12 @@ const UpdateFormEquipos: FC<UpdateFormProps> = ({
       ...equipoData,
       [event.target.name]: event.target.value,
     });
-    console.log(equipoData);
+  };
+  const handleChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setEquipoData({
+      ...equipoData,
+      [event.target.name]: event.target.value,
+    });
   };
 
 
@@ -58,8 +70,14 @@ const UpdateFormEquipos: FC<UpdateFormProps> = ({
     event.preventDefault();
     try {
       const result = await UpdateEquipos(equipoData.id, equipoData);
-      console.log("Empleado Actualizado successfully:", result.data);
-      window.location.reload();
+      if (result.flag === false) {
+        toast.error(result.message);
+        console.log(result.message);
+      }
+      else {
+        toast.success("Equipo Actualizado Correctamente");
+        setTimeout(() => {window.location.reload();},2000);
+      }
     } catch (error) {
       console.error("Error Actualizando empleado:", error);
     }
@@ -138,6 +156,59 @@ const UpdateFormEquipos: FC<UpdateFormProps> = ({
                 id="nombre_Equipo"
                 name="nombre_Equipo"
                 value={equipoData.nombre_Equipo}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="dominio_Azure" className="text-right">
+                Dominio
+              </Label>
+              <select
+                  id="dominio_Azure"
+                  name="dominio_Azure"
+                  value={equipoData.dominio_Azure}
+                  onChange={handleChangeSelect}
+                  className="col-span-3"
+                >
+                  <option value="Select">Select</option>
+                  <option value="Azure">Azure</option>
+                  <option value="Dominio">Dominio</option>
+                  <option value="Hibrido">Hibrido</option>
+                </select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="direccion" className="text-right">
+                Direccion
+              </Label>
+              <Input
+                id="direccion"
+                name="direccion"
+                value={equipoData.direccion}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="departamento" className="text-right">
+                Departamento
+              </Label>
+              <Input
+                id="departamento"
+                name="departamento"
+                value={equipoData.departamento}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="programas" className="text-right">
+                Programas
+              </Label>
+              <Input
+                id="programas"
+                name="programas"
+                value={equipoData.programas}
                 onChange={handleChange}
                 className="col-span-3"
               />

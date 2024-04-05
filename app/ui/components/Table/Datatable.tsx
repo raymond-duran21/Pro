@@ -68,7 +68,6 @@ import { Equipos } from '@/types/indes'
         columnVisibility,
         rowSelection: rowSelection},
     })
-    console.log(rowSelection)
 
     return (
       <div>

@@ -19,6 +19,7 @@ import { getMonitorById, UpdateMonitores } from "@/services/equipos/monitor";
 import { getScannerById, UpdateScanner } from "@/services/equipos/scanner";
 import { UpdateDocking, UpdateEquipo, UpdateFlota, UpdateMonitor, UpdateScanner_Ups } from "@/types/indes";
 import { PenSquareIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { FC, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -39,6 +40,8 @@ const UpdateFormFlotas: FC<UpdateFormProps> = ({
     edificio: "",
     observaciones: "",
   });
+
+  const session = useSession();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,7 +72,7 @@ const UpdateFormFlotas: FC<UpdateFormProps> = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const result = await UpdateFlotas(flotasData.id, flotasData);
+      const result = await UpdateFlotas(flotasData.id, flotasData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

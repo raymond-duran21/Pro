@@ -6,14 +6,24 @@ if (!apiUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
 
 
 export const CreateScanner = async (
-    data: CreateScanner_Ups
+    data: CreateScanner_Ups,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.post(
         `${apiUrl}/Scanner`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -51,14 +61,24 @@ export const getScannerById = async (
 
 export const UpdateScanner = async (
     id: Number,
-    data: UpdateScanner_Ups
+    data: UpdateScanner_Ups,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.patch(
         `${apiUrl}/Scanner/${id}`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -70,11 +90,18 @@ export const UpdateScanner = async (
 
 export const DeleteScanner = async (
     id: Number,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.delete(
-        `${apiUrl}/Scanner/${id}`
+        `${apiUrl}/Scanner/${id}`,{headers}
       );
 
       return result.data;

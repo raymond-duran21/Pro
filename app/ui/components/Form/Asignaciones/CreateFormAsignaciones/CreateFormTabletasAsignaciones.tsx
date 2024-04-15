@@ -38,6 +38,7 @@ import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { getAllFlotas } from "@/services/equipos/flota";
 import { getAllTabletas } from "@/services/equipos/tabletas";
+import { useSession } from "next-auth/react";
 
 
 interface CreateFormProps {
@@ -64,6 +65,7 @@ const CreateFormTabletasAsignaciones: FC<CreateFormProps> = ({
     const [equipoId, setEquipoId] = useState("");
     const [tipoEquipo, setTipoEquipo] = useState("");
     const [DataEquipos, setDataEquipos] = useState<Tabletas[]>([]);
+    const session = useSession();
     
 
     useEffect(() => {
@@ -78,7 +80,8 @@ const CreateFormTabletasAsignaciones: FC<CreateFormProps> = ({
         const fetchDataEquipos = async () => {
           try {
             const response = await getAllTabletas();
-            setDataEquipos(response);
+            const equiposDisponibles = response.filter((equipo) => equipo.estado === "Disponible");
+            setDataEquipos(equiposDisponibles);
           } catch (error) {
             console.error('Error al obtener datos de la flota:', error);
           }
@@ -148,7 +151,7 @@ const CreateFormTabletasAsignaciones: FC<CreateFormProps> = ({
     event.preventDefault();
     console.log(asignacionesData)   
     try {
-      const result = await CreateAsignacion(asignacionesData);
+      const result = await CreateAsignacion(asignacionesData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

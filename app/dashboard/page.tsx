@@ -10,16 +10,15 @@ export default function Dashboard() {
 
   const router = useRouter();
 
-  const { data: session, status } = useSession();
+      const { data: session, status } = useSession();
+    
+      useEffect(() => {
+        if (status === "unauthenticated") {
+          // Redirigir al login
+          router.push("/");
+        }
+      }, [session, status]);
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      // Redirigir al login
-      router.push("/");
-    }
-  }, [session, status]);
-
-  console.log(session?.expires);
 
     return (
         <div className=" relative top-[100px] right-[300px]">

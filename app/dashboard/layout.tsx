@@ -1,4 +1,3 @@
-import SessionAuthProvider from '@/context/SessionAuthProvider'
 import Sidebar from '../ui/components/Sidebar/Sidebar'
 
 

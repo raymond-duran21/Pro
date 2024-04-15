@@ -17,6 +17,8 @@ import { FC, useState } from "react";
 import * as React from "react"
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AsignarProgramaEquipo from "./AsignarProgramasEquipos";
+import { useSession } from "next-auth/react";
  
 
 interface CreateFormProps {
@@ -38,11 +40,12 @@ const CreateFormEquipos: FC<CreateFormProps> = () => {
     dominio_Azure: "",
     direccion: "",
     departamento: "",
-    programas: "",
     empleados_Cedula: "",
     observaciones: "",
     estado:"",
   });
+  const session = useSession();
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEquiposData({
@@ -61,7 +64,7 @@ const CreateFormEquipos: FC<CreateFormProps> = () => {
     event.preventDefault();
 
     try {
-      const result = await CreateEquipos(equiposData);
+      const result = await CreateEquipos(equiposData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);
@@ -262,18 +265,6 @@ const CreateFormEquipos: FC<CreateFormProps> = () => {
                 id="departamento"
                 name="departamento"
                 value={equiposData.departamento}
-                onChange={handleChange}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="programas" className="text-right">
-                Programas
-              </Label>
-              <Input
-                id="programas"
-                name="programas"
-                value={equiposData.programas}
                 onChange={handleChange}
                 className="col-span-3"
               />

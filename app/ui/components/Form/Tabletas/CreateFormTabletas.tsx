@@ -27,6 +27,7 @@ import { format } from "date-fns"
 import 'react-toastify/dist/ReactToastify.css';
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
  
 
 interface CreateFormProps {
@@ -48,6 +49,9 @@ const CreateFormTabletas: FC<CreateFormProps> = () => {
     observaciones: "",
   });
 
+  const session = useSession();
+
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTabletaData({
@@ -66,7 +70,7 @@ const CreateFormTabletas: FC<CreateFormProps> = () => {
     event.preventDefault();
 
     try {
-      const result = await CreateTabletas(tabletaData);
+      const result = await CreateTabletas(tabletaData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

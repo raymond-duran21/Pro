@@ -19,6 +19,7 @@ import { getScannerById, UpdateScanner } from "@/services/equipos/scanner";
 import { getUpsById, UpdateUps } from "@/services/equipos/ups";
 import { UpdateDocking, UpdateEquipo, UpdateMonitor, UpdateScanner_Ups } from "@/types/indes";
 import { PenSquareIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { FC, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -37,6 +38,9 @@ const UpdateFormUps: FC<UpdateFormProps> = ({
     departamento: "",
     observaciones: "",
   });
+  
+  const session = useSession();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,7 +71,7 @@ const UpdateFormUps: FC<UpdateFormProps> = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const result = await UpdateUps(upsData.id, upsData);
+      const result = await UpdateUps(upsData.id, upsData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

@@ -18,6 +18,8 @@ import { PenSquareIcon } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import AsignarProgramaEquipo from "./AsignarProgramasEquipos";
+import { useSession } from "next-auth/react";
 
 
 interface UpdateFormProps {
@@ -29,16 +31,16 @@ const UpdateFormEquipos: FC<UpdateFormProps> = ({
 }) => {
   const [equipoData, setEquipoData] = useState<UpdateEquipo>({
     id:id,
-    almacenamiento: "",
+    disco_Duro: "",
     memoria_Ram: "",
     so: "",
     nombre_Equipo: "",
     dominio_Azure: "",
     direccion: "",
     departamento: "",
-    programas: "",
     observaciones: "",
   });
+  const session = useSession();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,6 +53,8 @@ const UpdateFormEquipos: FC<UpdateFormProps> = ({
     };
     fetchData();
     }, [id]);
+
+    
   
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEquipoData({
@@ -65,11 +69,10 @@ const UpdateFormEquipos: FC<UpdateFormProps> = ({
     });
   };
 
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const result = await UpdateEquipos(equipoData.id, equipoData);
+      const result = await UpdateEquipos(equipoData.id, equipoData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);
@@ -94,8 +97,8 @@ const UpdateFormEquipos: FC<UpdateFormProps> = ({
       </DialogTrigger>
         <DialogContent className="sm:max-w-[525px]">
           <DialogHeader>
-            <DialogTitle>Editar Empleado</DialogTitle>
-            <DialogDescription>Introduzca los datos del Empleado que quiere editar.</DialogDescription>
+            <DialogTitle>Editar Equipo</DialogTitle>
+            <DialogDescription>Introduzca los datos del Equipo que quiere editar.</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4 py-4">
@@ -119,7 +122,7 @@ const UpdateFormEquipos: FC<UpdateFormProps> = ({
                 <Input
                   id="almacenamiento"
                   name="almacenamiento"
-                  value={equipoData.almacenamiento}
+                  value={equipoData.disco_Duro}
                   onChange={handleChange}
                   className="col-span-3"
                 />
@@ -196,19 +199,8 @@ const UpdateFormEquipos: FC<UpdateFormProps> = ({
               <Input
                 id="departamento"
                 name="departamento"
+                disabled={true}
                 value={equipoData.departamento}
-                onChange={handleChange}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="programas" className="text-right">
-                Programas
-              </Label>
-              <Input
-                id="programas"
-                name="programas"
-                value={equipoData.programas}
                 onChange={handleChange}
                 className="col-span-3"
               />

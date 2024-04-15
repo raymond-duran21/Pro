@@ -6,14 +6,24 @@ if (!apiUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
 
 
 export const CreateFlotas = async (
-    data: CreateFlota
+    data: CreateFlota,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.post(
         `${apiUrl}/Flotas`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -51,14 +61,23 @@ export const getFlotasById = async (
 
 export const UpdateFlotas = async (
     id: Number,
-    data: UpdateFlota
+    data: UpdateFlota,
+    token: string | undefined
 ) => {
+    if (!token) return;
+
+      const headers = {
+          Authorization: `Bearer ${token}`,
+      };
 
     try{ 
       const result = await axios.patch(
         `${apiUrl}/Flotas/${id}`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -70,11 +89,18 @@ export const UpdateFlotas = async (
 
 export const DeleteFlotas = async (
     id: Number,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.delete(
-        `${apiUrl}/Flotas/${id}`
+        `${apiUrl}/Flotas/${id}`, {headers}
       );
 
       return result.data;

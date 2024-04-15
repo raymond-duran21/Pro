@@ -10,12 +10,24 @@ import { getAllEquipos } from "@/services/equipos/equipos";
 import CreateFormEquipos from "@/app/ui/components/Form/Equipos/CreateFormEquipos";
 import UpdateFormEquipos from "@/app/ui/components/Form/Equipos/UpdateFormEquipos";
 import DeleteDialogEquipos from "@/app/ui/components/Form/Equipos/DeleteFormEquipos";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const ListaEquipos: React.FC = () => {
     const [Data, setData] = useState<Equipos[]>([]);
     const [loading, setLoading] = useState(true);
+    
+    const router = useRouter();
 
-
+      const { data: session, status } = useSession();
+    
+      useEffect(() => {
+        if (status === "unauthenticated") {
+          // Redirigir al login
+          router.push("/");
+        }
+      }, [session, status]);
+    
     useEffect(() => {
       const fetchData = async () => {
         try {

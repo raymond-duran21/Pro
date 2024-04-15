@@ -1,19 +1,30 @@
 import axios from 'axios';
-import { CreateAsignaciones, Asignaciones, Programas, CreatePrograma, AsignarProgramaEquipo } from "@/types/indes";
+import { CreateAsignaciones, Asignaciones, Programas, CreatePrograma, AsignarProgramasEquipos } from "@/types/indes";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 if (!apiUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
 
 
 export const CreateProgramas = async (
-    data: CreatePrograma
+    data: CreatePrograma,
+    token: string | undefined
+
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.post(
         `${apiUrl}/Programas`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -23,15 +34,28 @@ export const CreateProgramas = async (
     }
 };
 
-export const AsignarProgramasEquipos = async (
-    data: AsignarProgramaEquipo
+export const AsignarProgramasEquipo = async (
+    equipoId: number,
+    programaId: number[],
+    token: string | undefined
+
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.post(
         `${apiUrl}/Programas/Asignar`,
         {
-            ...data,
+          equipoId,
+          programaId
+        },
+        {
+            headers,
         }
       );
 
@@ -66,12 +90,19 @@ export const getProgramasById = async (
 };
 
 export const DeleteProgramas = async (
-    id: Number
+    id: Number,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.delete(
-        `${apiUrl}/Programas/${id}`
+        `${apiUrl}/Programas/${id}`, {headers}
       );
 
       return result.data;

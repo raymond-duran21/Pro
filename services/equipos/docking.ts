@@ -6,14 +6,24 @@ if (!apiUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
 
 
 export const CreateDockings = async (
-    data: CreateDocking
+    data: CreateDocking,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.post(
         `${apiUrl}/Docking`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -51,14 +61,24 @@ export const getDockingById = async (
 
 export const UpdateDockings = async (
     id: Number,
-    data: UpdateDocking
+    data: UpdateDocking,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.patch(
         `${apiUrl}/Docking/${id}`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -70,11 +90,18 @@ export const UpdateDockings = async (
 
 export const DeleteDockings = async (
     id: Number,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.delete(
-        `${apiUrl}/Docking/${id}`
+        `${apiUrl}/Docking/${id}`, {headers}
       );
 
       return result.data;

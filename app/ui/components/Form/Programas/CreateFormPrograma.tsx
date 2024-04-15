@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { CreateProgramas } from "@/services/programas/programas";
 import { CreatePrograma } from "@/types/indes";
+import { useSession } from "next-auth/react";
 import { FC, useState } from "react";
 import * as React from "react"
 import { toast } from 'react-toastify';
@@ -27,6 +28,8 @@ const CreateFormScanner: FC<CreateFormProps> = () => {
     programa:"",
     estado:"",
   });
+  const session = useSession();
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgramaData({
@@ -39,7 +42,7 @@ const CreateFormScanner: FC<CreateFormProps> = () => {
     event.preventDefault();
 
     try {
-      const result = await CreateProgramas(programaData);
+      const result = await CreateProgramas(programaData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

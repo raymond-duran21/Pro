@@ -19,8 +19,9 @@ const ListaDocking: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
-    const { data: session, status } = useSession();
 
+      const { data: session, status } = useSession();
+    
       useEffect(() => {
         if (status === "unauthenticated") {
           // Redirigir al login

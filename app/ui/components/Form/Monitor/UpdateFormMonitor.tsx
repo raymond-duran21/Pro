@@ -17,6 +17,7 @@ import { UpdateEquipos, getEquiposById } from "@/services/equipos/equipos";
 import { getMonitorById, UpdateMonitores } from "@/services/equipos/monitor";
 import { UpdateDocking, UpdateEquipo, UpdateMonitor } from "@/types/indes";
 import { PenSquareIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { FC, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -35,6 +36,9 @@ const UpdateFormMonitor: FC<UpdateFormProps> = ({
     departamento: "",
     observaciones: "",
   });
+
+  const session = useSession();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,7 +69,7 @@ const UpdateFormMonitor: FC<UpdateFormProps> = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const result = await UpdateMonitores(monitorData.id, monitorData);
+      const result = await UpdateMonitores(monitorData.id, monitorData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);
@@ -151,7 +155,7 @@ const UpdateFormMonitor: FC<UpdateFormProps> = ({
               Close
             </Button>
           </DialogClose>
-            <Button type="submit" className="relative left-[120px]">Actualizar Scanner</Button>
+            <Button type="submit" className="relative left-[120px]">Actualizar Monitor</Button>
           </DialogFooter>
         </form>
       </DialogContent>

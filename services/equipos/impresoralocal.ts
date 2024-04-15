@@ -6,14 +6,24 @@ if (!apiUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
 
 
 export const CreateImpresora = async (
-    data: CreateImpresoraLocal
+    data: CreateImpresoraLocal,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.post(
         `${apiUrl}/Impresora`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -51,14 +61,24 @@ export const getImpresoraById = async (
 
 export const UpdateImpresora = async (
     id: Number,
-    data: UpdateImpresoraLocal
+    data: UpdateImpresoraLocal,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.patch(
         `${apiUrl}/Impresora/${id}`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -70,11 +90,18 @@ export const UpdateImpresora = async (
 
 export const DeleteImpresora = async (
     id: Number,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.delete(
-        `${apiUrl}/Impresora/${id}`
+        `${apiUrl}/Impresora/${id}`, {headers}
       );
 
       return result.data;

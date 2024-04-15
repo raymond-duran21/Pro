@@ -17,6 +17,7 @@ import ViewModelAsignaciones from "@/app/ui/components/Form/Asignaciones/ViewAsi
 import { useSession } from "next-auth/react";
 import { utils, writeFile } from 'xlsx';
 import SelectFormAsignaciones from "@/app/ui/components/Form/Asignaciones/SelectFormAsignaciones";
+import { useRouter } from "next/navigation";
 
 
 const ListaAsignaciones: React.FC = () => {
@@ -24,6 +25,19 @@ const ListaAsignaciones: React.FC = () => {
     const [asignacionesData, setAsignacionesData] = useState<Asignaciones[]>([]);
     const [Id, setId] = useState(0);
     const [loading, setLoading] = useState(true);
+
+
+    const router = useRouter();
+
+      const { data: session, status } = useSession();
+    
+      useEffect(() => {
+        if (status === "unauthenticated") {
+          // Redirigir al login
+          router.push("/");
+        }
+      }, [session, status]);
+
 
     useEffect(() => {
       const fetchData = async () => {

@@ -7,14 +7,24 @@ if (!apiUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
 
 
 export const CreateTabletas = async (
-    data: CreateTableta
+    data: CreateTableta,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.post(
         `${apiUrl}/Tableta`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -52,14 +62,24 @@ export const getTabletasById = async (
 
 export const UpdateTabletas = async (
     id: Number,
-    data: UpdateTableta
+    data: UpdateTableta,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.patch(
         `${apiUrl}/Tableta/${id}`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -71,11 +91,18 @@ export const UpdateTabletas = async (
 
 export const DeleteTabletas = async (
     id: Number,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.delete(
-        `${apiUrl}/Tableta/${id}`
+        `${apiUrl}/Tableta/${id}`,{headers}
       );
 
       return result.data;

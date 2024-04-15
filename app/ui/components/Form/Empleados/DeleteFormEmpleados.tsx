@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { DeleteEmpleados } from "@/services/empleados/empleados";
 import { UserX } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { FC } from "react"
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,11 +25,12 @@ import 'react-toastify/dist/ReactToastify.css';
   const DeleteDialogEmpleados: FC<DeleteFormProps> =({
     id,
 }) => {
+  const session = useSession();
 
 
     const handleSubmit = async () => {
         try {
-          const result = await DeleteEmpleados(id);
+          const result = await DeleteEmpleados(id, session.data?.accessToken);
           if (result.flag === false) {
             toast.error(result.message);
             console.log(result.message);

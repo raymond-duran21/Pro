@@ -54,43 +54,43 @@ const SelectFormAsignaciones: React.FC<CreateFormProps> = ({
       <PopoverContent className="w-48">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="font-medium leading-none">Que desea agregar?</h4>
+            <h4 className="font-medium ">Que desea agregar?</h4>
 
           </div>
           <div className="grid gap-4">
-            <div className="grid grid-cols-3 items-center gap-[100px]">
+            <div className="grid grid-cols-3 items-center gap-8">
               <Label>CPU</Label>
               <CreateFormCpuLaptopAsignaciones id={asignacionesData.empleadoId} nombre={asignacionesData.nombreEmpleado} departamento={asignacionesData.departamento} tipo="CPU"/>
             </div>
-            <div className="grid grid-cols-3 items-center gap-[100px]">
+            <div className="grid grid-cols-3 items-center gap-8">
               <Label>Laptop</Label>
               <CreateFormCpuLaptopAsignaciones id={asignacionesData.empleadoId} nombre={asignacionesData.nombreEmpleado} departamento={asignacionesData.departamento} tipo="Laptop"/>
             </div>
-            <div className="grid grid-cols-3 items-center gap-[100px]">
+            <div className="grid grid-cols-3 items-center gap-8">
               <Label>Monitor</Label>
               <CreateFormMonitorAsignaciones id={asignacionesData.empleadoId} nombre={asignacionesData.nombreEmpleado} departamento={asignacionesData.departamento} tipo="Monitor"/>
             </div>
-            <div className="grid grid-cols-3 items-center gap-[100px]">
+            <div className="grid grid-cols-3 items-center gap-8">
               <Label>Docking Station</Label>
               <CreateFormDockingAsignaciones id={asignacionesData.empleadoId} nombre={asignacionesData.nombreEmpleado} departamento={asignacionesData.departamento} tipo="Docking"/>
             </div>
-            <div className="grid grid-cols-3 items-center gap-[100px]">
+            <div className="grid grid-cols-3 items-center gap-8">
               <Label>Impresora Local</Label>
               <CreateFormImpresoraAsignaciones id={asignacionesData.empleadoId} nombre={asignacionesData.nombreEmpleado} departamento={asignacionesData.departamento} tipo="Impresora"/>
             </div>
-            <div className="grid grid-cols-3 items-center gap-[100px]">
+            <div className="grid grid-cols-3 items-center gap-8">
               <Label>Scanner</Label>
               <CreateFormScannerAsignaciones id={asignacionesData.empleadoId} nombre={asignacionesData.nombreEmpleado} departamento={asignacionesData.departamento} tipo="Scanner"/>
             </div>
-            <div className="grid grid-cols-3 items-center gap-[100px]">
+            <div className="grid grid-cols-3 items-center gap-8">
               <Label>Ups</Label>
               <CreateFormUpsAsignaciones id={asignacionesData.empleadoId} nombre={asignacionesData.nombreEmpleado} departamento={asignacionesData.departamento} tipo="Ups"/>
             </div>
-            <div className="grid grid-cols-3 items-center gap-[100px]">
+            <div className="grid grid-cols-3 items-center gap-8">
               <Label>Flotas</Label>
               <CreateFormFlotasAsignaciones id={asignacionesData.empleadoId} nombre={asignacionesData.nombreEmpleado} departamento={asignacionesData.departamento} tipo="Flota"/>
             </div>
-            <div className="grid grid-cols-3 items-center gap-[100px]">
+            <div className="grid grid-cols-3 items-center gap-8">
               <Label>Tabletas</Label>
               <CreateFormTabletasAsignaciones id={asignacionesData.empleadoId} nombre={asignacionesData.nombreEmpleado} departamento={asignacionesData.departamento} tipo="Tableta"/>
             </div>

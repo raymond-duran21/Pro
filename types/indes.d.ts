@@ -80,7 +80,6 @@ export interface CreateEquipo {
   dominio_Azure: string;
   direccion: string;
   departamento: string;
-  programas: string;
   empleados_Cedula: string;
   observaciones: string;
   estado: string;
@@ -88,14 +87,13 @@ export interface CreateEquipo {
 
 export interface UpdateEquipo {
   id: number;
-  almacenamiento: string;
+  disco_Duro: string;
   memoria_Ram: string;
   so: string;
   nombre_Equipo: string;
   dominio_Azure: string;
   direccion: string;
   departamento: string;
-  programas: string;
   observaciones: string;
 }
 
@@ -287,9 +285,9 @@ export interface CreatePrograma {
   estado: string;
 }
 
-export interface AsignarProgramaEquipo{
+export interface AsignarProgramasEquipos{
   equipoId: number;
-  programaId: number;
+  programaId: number[];
 }
 
 export interface Flotas {
@@ -367,4 +365,80 @@ export interface UpdateTableta {
   direccion: string;
   edificio:string;
   observaciones: string;
+}
+
+export interface AuditoriaResult{
+  data: Auditoria[];
+}
+
+export interface EquipoWithPrograma {
+  id: number;
+  tipo: string;
+  marca: string;
+  modelo: string;
+  serial: string;
+  codigo_Invi_Mived:string;
+  codigo_Bienes_Nacionales: string;
+  disco_Duro: string;
+  memoria_Ram: string;
+  procesador: string;
+  so: string;
+  nombre_Equipo: string;
+  dominio_Azure: string;
+  direccion: string;
+  departamento: string;
+  empleados_Cedula: string;
+  observaciones: string;
+  estado: string;
+  fechaAsignacion: string;
+  programas: Programas[]
+}
+
+export interface Other {
+  id: number;
+  tipo: string;
+  marca: string;
+  modelo: string;
+  serial: string;
+  direccion: string;
+  departamento: string;
+  empleados_Cedula: string;
+  fechaAsignacion: string;
+  observaciones: string;
+  estado: string;
+}
+
+export interface ViewFlotas {
+  id: number;
+  tipo: string;
+  marca: string;
+  modelo: string;
+  serial: string;
+  numero: string;
+  datos: string;
+  direccion: string;
+  departamento: string;
+  edificio:string;
+  observaciones: string;
+  empleados_Cedula: string;
+  estado: string;
+  fecha_Asignacion: string,
+}
+
+export interface ViewTabletas {
+  id: number;
+  tipo: string;
+  marca: string;
+  modelo: string;
+  serial: string;
+  codigo_SIAB: string;
+  numero: string;
+  direccion: string;
+  departamento: string;
+  edificio:string;
+  fechaAdquisicion: string;
+  observaciones: string;
+  empleados_Cedula: string;
+  estado: string;
+  fecha_Asignacion: string,
 }

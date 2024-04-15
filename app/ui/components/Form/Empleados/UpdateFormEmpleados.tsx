@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label"
 import { CreateEmpleado, UpdateEmpleados, getEmpleadosById } from "@/services/empleados/empleados";
 import { CreateEmpleados, Empleados, UpdateEmpleado } from "@/types/indes";
 import { PenSquareIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -31,6 +32,8 @@ const UpdateFormEmpleados: FC<UpdateFormProps> = ({
     puesto: "",
     departamento: "",
   });
+  const session = useSession();
+
   
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +59,7 @@ const UpdateFormEmpleados: FC<UpdateFormProps> = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const result = await UpdateEmpleados(employeeData.id, employeeData);
+      const result = await UpdateEmpleados(employeeData.id, employeeData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

@@ -17,6 +17,7 @@ import { CreateMonitores } from "@/services/equipos/monitor";
 import { CreateScanner } from "@/services/equipos/scanner";
 import { CreateUps } from "@/services/equipos/ups";
 import { CreateDocking, CreateEquipo, CreateMonitor, CreateScanner_Ups } from "@/types/indes";
+import { useSession } from "next-auth/react";
 import { FC, useState } from "react";
 import * as React from "react"
 import { toast } from 'react-toastify';
@@ -40,6 +41,8 @@ const CreateFormUps: FC<CreateFormProps> = () => {
     estado:"",
   });
 
+  const session = useSession();
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpsData({
       ...upsData,
@@ -57,7 +60,7 @@ const CreateFormUps: FC<CreateFormProps> = () => {
     event.preventDefault();
 
     try {
-      const result = await CreateUps(upsData);
+      const result = await CreateUps(upsData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

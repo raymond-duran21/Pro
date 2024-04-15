@@ -1,19 +1,29 @@
 import axios from 'axios';
-import { Equipos, CreateEquipo, UpdateEquipo } from "@/types/indes";
+import { Equipos, CreateEquipo, UpdateEquipo, EquipoWithPrograma } from "@/types/indes";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 if (!apiUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
 
 
 export const CreateEquipos = async (
-    data: CreateEquipo
+    data: CreateEquipo,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.post(
         `${apiUrl}/Equipos`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -51,14 +61,24 @@ export const getEquiposById = async (
 
 export const UpdateEquipos = async (
     id: Number,
-    data: UpdateEquipo
+    data: UpdateEquipo,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.patch(
         `${apiUrl}/Equipos/${id}`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -70,15 +90,36 @@ export const UpdateEquipos = async (
 
 export const DeleteEquipos = async (
     id: Number,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.delete(
-        `${apiUrl}/Equipos/${id}`
+        `${apiUrl}/Equipos/${id}`, {headers}
       );
 
       return result.data;
     }catch (error) {
         throw error;
     }
+};
+
+export const getEquiposBySerial = async (
+  serial: string | undefined
+) => {
+
+  try {
+    const response = await axios.get<EquipoWithPrograma>(`${apiUrl}/Equipos/BySerial/${serial}`
+    );
+
+    return response.data ;
+  } catch (error) {
+    throw error;
+  }
 };

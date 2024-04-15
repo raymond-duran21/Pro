@@ -17,6 +17,7 @@ import { CreateFlotas } from "@/services/equipos/flota";
 import { CreateMonitores } from "@/services/equipos/monitor";
 import { CreateScanner } from "@/services/equipos/scanner";
 import { CreateDocking, CreateEquipo, CreateFlota, CreateMonitor, CreateScanner_Ups } from "@/types/indes";
+import { useSession } from "next-auth/react";
 import { FC, useState } from "react";
 import * as React from "react"
 import { toast } from 'react-toastify';
@@ -38,6 +39,8 @@ const CreateFormFlotas: FC<CreateFormProps> = () => {
     edificio: "",
     observaciones: "",
   });
+  const session = useSession();
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFlotasData({
@@ -56,7 +59,7 @@ const CreateFormFlotas: FC<CreateFormProps> = () => {
     event.preventDefault();
 
     try {
-      const result = await CreateFlotas(flotasData);
+      const result = await CreateFlotas(flotasData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

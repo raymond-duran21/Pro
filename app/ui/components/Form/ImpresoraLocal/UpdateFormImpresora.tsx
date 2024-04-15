@@ -17,6 +17,7 @@ import { UpdateEquipos, getEquiposById } from "@/services/equipos/equipos";
 import { getImpresoraById, UpdateImpresora } from "@/services/equipos/impresoralocal";
 import { UpdateDocking, UpdateEquipo, UpdateImpresoraLocal } from "@/types/indes";
 import { PenSquareIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { FC, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -36,6 +37,8 @@ const UpdateFormImpresora: FC<UpdateFormProps> = ({
     observaciones: "",
     obsoleto: "",
   });
+
+  const session = useSession();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,7 +69,7 @@ const UpdateFormImpresora: FC<UpdateFormProps> = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const result = await UpdateImpresora(impresoraData.id, impresoraData);
+      const result = await UpdateImpresora(impresoraData.id, impresoraData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

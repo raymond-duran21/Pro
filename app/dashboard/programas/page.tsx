@@ -27,17 +27,17 @@ const ListaProgramas: React.FC = () => {
     const [Data, setData] = useState<Programas[]>([]);
     const [loading, setLoading] = useState(true);
 
+
     const router = useRouter();
 
-  const { data: session, status } = useSession();
-
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      // Redirigir al login
-      router.push("/");
-    }
-  }, [session, status]);
+      const { data: session, status } = useSession();
+    
+      useEffect(() => {
+        if (status === "unauthenticated") {
+          // Redirigir al login
+          router.push("/");
+        }
+      }, [session, status]);
 
     useEffect(() => {
       const fetchData = async () => {

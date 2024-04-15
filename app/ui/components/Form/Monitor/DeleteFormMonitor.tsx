@@ -14,6 +14,7 @@ import { DeleteEmpleados } from "@/services/empleados/empleados";
 import { DeleteDockings } from "@/services/equipos/docking";
 import { DeleteMonitor } from "@/services/equipos/monitor";
 import { UserX } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { FC } from "react"
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,10 +28,12 @@ import 'react-toastify/dist/ReactToastify.css';
     id,
 }) => {
 
+  const session = useSession();
+
 
     const handleSubmit = async () => {
         try {
-          const result = await DeleteMonitor(id);
+          const result = await DeleteMonitor(id, session.data?.accessToken);
           if (result.flag === false) {
             toast.error(result.message);
             console.log(result.message);

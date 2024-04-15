@@ -11,11 +11,25 @@ import { Checkbox } from "@/components/ui/checkbox"
 import CreateFormEmpleados from "@/app/ui/components/Form/Empleados/CreateFormEmpleados";
 import UpdateFormEmpleados from "@/app/ui/components/Form/Empleados/UpdateFormEmpleados";
 import DeleteDialogEmpleados from "@/app/ui/components/Form/Empleados/DeleteFormEmpleados";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const ListaEmpleados: React.FC = () => {
     const [Data, setData] = useState<Empleados[]>([]);
     const [Id, setId] = useState(0);
     const [loading, setLoading] = useState(true);
+
+    const router = useRouter();
+
+      const { data: session, status } = useSession();
+    
+      useEffect(() => {
+        if (status === "unauthenticated") {
+          // Redirigir al login
+          router.push("/");
+        }
+      }, [session, status]);
+
 
     useEffect(() => {
       const fetchData = async () => {

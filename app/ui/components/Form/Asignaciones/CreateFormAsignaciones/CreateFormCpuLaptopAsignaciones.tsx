@@ -36,6 +36,8 @@ import { DataTable } from "../../../Table/Datatable";
 import React from 'react';
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import AsignarProgramaEquipo from "../../Equipos/AsignarProgramasEquipos";
+import { useSession } from "next-auth/react";
 
 
 interface CreateFormProps {
@@ -62,7 +64,8 @@ const CreateFormCpuLaptopAsignaciones: FC<CreateFormProps> = ({
     const [equipoId, setEquipoId] = useState("");
     const [tipoEquipo, setTipoEquipo] = useState("");
     const [DataEquipos, setDataEquipos] = useState<Equipos[]>([]);
-    
+    const [showProgramAssignmentButton, setShowProgramAssignmentButton] = useState(false);
+    const session = useSession();
 
     useEffect(() => {
         setasignacionesData((prevData) => ({
@@ -76,13 +79,16 @@ const CreateFormCpuLaptopAsignaciones: FC<CreateFormProps> = ({
         const fetchDataEquipos = async () => {
           try {
             const response = await getAllEquipos();
-            setDataEquipos(response);
+            const equiposDisponibles = response.filter((equipo) => equipo.estado === "Disponible" && equipo.tipo === tipo);
+            setDataEquipos(equiposDisponibles);
           } catch (error) {
             console.error('Error al obtener datos de empleados:', error);
           }
         };
         fetchDataEquipos();
     }, []);
+
+
 
     const columns: ColumnDef<Equipos>[] = [
         {
@@ -104,9 +110,17 @@ const CreateFormCpuLaptopAsignaciones: FC<CreateFormProps> = ({
                 if (value) {
                   setEquipoId(row.original.serial);
                   setTipoEquipo(row.original.tipo);
+                  setShowProgramAssignmentButton(true);
                   const rowData = row.original;
                   console.log("Valores de la fila seleccionada:", rowData);
                   // Realiza las acciones necesarias con los valores de la fila
+                }
+                else{
+                  setEquipoId("");
+                  setTipoEquipo("");
+                  setShowProgramAssignmentButton(false);
+                  const rowData = row.original;
+                  
                 }}}
               aria-label="Select row"
             />
@@ -140,13 +154,25 @@ const CreateFormCpuLaptopAsignaciones: FC<CreateFormProps> = ({
             accessorKey: 'estado',
             header: 'Estado equipo',
         },
+        {
+          id: 'actions',
+          header: 'Acciones',
+          cell: ({ row }) => (
+            <div className="flex gap-x-1 ">
+              {showProgramAssignmentButton && (
+                <AsignarProgramaEquipo EquipoId={row.original.id}/>
+              )}
+            </div>
+          ),
+          enableSorting: false,
+        },
     ]
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(asignacionesData)   
     try {
-      const result = await CreateAsignacion(asignacionesData);
+      const result = await CreateAsignacion(asignacionesData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);
@@ -159,9 +185,6 @@ const CreateFormCpuLaptopAsignaciones: FC<CreateFormProps> = ({
     } catch (error) {
       console.error("Error creando asignacion:", error);
     }
-
-    
-
   };
 
   return (
@@ -193,7 +216,6 @@ const CreateFormCpuLaptopAsignaciones: FC<CreateFormProps> = ({
               Close
             </Button>
           </DialogClose>
-            <Button type="submit" className="relative  left-[120px]">Asignar Equipo</Button>
           </DialogFooter>
         </form>
       </DialogContent>

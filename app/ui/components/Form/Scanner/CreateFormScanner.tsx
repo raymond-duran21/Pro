@@ -16,6 +16,7 @@ import { CreateEquipos } from "@/services/equipos/equipos";
 import { CreateMonitores } from "@/services/equipos/monitor";
 import { CreateScanner } from "@/services/equipos/scanner";
 import { CreateDocking, CreateEquipo, CreateMonitor, CreateScanner_Ups } from "@/types/indes";
+import { useSession } from "next-auth/react";
 import { FC, useState } from "react";
 import * as React from "react"
 import { toast } from 'react-toastify';
@@ -38,6 +39,8 @@ const CreateFormScanner: FC<CreateFormProps> = () => {
     observaciones: "",
     estado:"",
   });
+  const session = useSession();
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setScannerData({
@@ -56,7 +59,7 @@ const CreateFormScanner: FC<CreateFormProps> = () => {
     event.preventDefault();
 
     try {
-      const result = await CreateScanner(scannerData);
+      const result = await CreateScanner(scannerData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

@@ -2,17 +2,28 @@
 
 import React, { ReactNode } from 'react'
 import { SessionProvider } from "next-auth/react"
+import { Session } from 'next-auth';
+import { ChakraProvider } from '@chakra-ui/react';
+import { CacheProvider } from "@chakra-ui/next-js";
 
-interface Props{
-    children: ReactNode
-}
 
-const SessionAuthProvider = ({children}: Props) => {
+export function SessionAuthProvider({
+  children,
+  session,
+}: {
+  children: React.ReactNode;
+  session: Session | null;
+}) {
   return (
-    <SessionProvider>
-        {children}
+    <SessionProvider
+      session={session}
+      refetchInterval={4 * 60}
+      refetchOnWindowFocus={true}
+    >
+      
+      <CacheProvider>
+        <ChakraProvider>{children}</ChakraProvider>
+      </CacheProvider>
     </SessionProvider>
-  )
+  );
 }
-
-export default SessionAuthProvider

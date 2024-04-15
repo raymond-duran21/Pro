@@ -3,6 +3,7 @@ import { AppWindow, ClipboardPen, Computer, LayoutDashboard, LucideIcon, SquareU
 import React from "react";
 import ItemSidebar from "./itemSidebar";
 import ButtonLogOut from '../SignOut';
+import { useSession } from 'next-auth/react';
 
 interface ISidebarItem {
     name: string;
@@ -15,6 +16,8 @@ interface ISubItem {
     name: string;
     path: string;
   }
+
+
 
 const items: ISidebarItem[] = [
     {
@@ -86,6 +89,7 @@ const items: ISidebarItem[] = [
 
 
 export default function Sidebar() {
+    
     return (
         <div className="fixed top-0 left-0 h-screen w-64 bg-sidebar-barcolor shadow-lg z-10 p-4">
         <div className='flex flex-col space-y-12 w-full'>

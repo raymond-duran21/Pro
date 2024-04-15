@@ -18,11 +18,23 @@ import CreateFormDocking from "@/app/ui/components/Form/Docking/CreateFormDockin
 import UpdateFormImpresora from "@/app/ui/components/Form/ImpresoraLocal/UpdateFormImpresora";
 import DeleteDialogImpresora from "@/app/ui/components/Form/ImpresoraLocal/DeleteFormImpresora";
 import CreateFormImpresora from "@/app/ui/components/Form/ImpresoraLocal/CreateFormImpresora";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const ListaImpresora: React.FC = () => {
     const [Data, setData] = useState<ImpresoraLocal[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const router = useRouter();
+
+      const { data: session, status } = useSession();
+    
+      useEffect(() => {
+        if (status === "unauthenticated") {
+          // Redirigir al login
+          router.push("/");
+        }
+      }, [session, status]);
 
     useEffect(() => {
       const fetchData = async () => {

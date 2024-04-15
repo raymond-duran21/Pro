@@ -15,6 +15,7 @@ import { CreateDockings } from "@/services/equipos/docking";
 import { CreateEquipos } from "@/services/equipos/equipos";
 import { CreateImpresora } from "@/services/equipos/impresoralocal";
 import { CreateDocking, CreateEquipo, CreateImpresoraLocal } from "@/types/indes";
+import { useSession } from "next-auth/react";
 import { FC, useState } from "react";
 import * as React from "react"
 import { toast } from 'react-toastify';
@@ -39,6 +40,8 @@ const CreateFormImpresora: FC<CreateFormProps> = () => {
     estado:"",
     obsoleto: "",
   });
+  const session = useSession();
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setImpresoraData({
@@ -57,7 +60,7 @@ const CreateFormImpresora: FC<CreateFormProps> = () => {
     event.preventDefault();
 
     try {
-      const result = await CreateImpresora(impresoraData);
+      const result = await CreateImpresora(impresoraData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

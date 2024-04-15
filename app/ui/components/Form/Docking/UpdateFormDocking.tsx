@@ -16,6 +16,7 @@ import { getDockingById,  UpdateDockings } from "@/services/equipos/docking";
 import { UpdateEquipos, getEquiposById } from "@/services/equipos/equipos";
 import { UpdateDocking, UpdateEquipo } from "@/types/indes";
 import { PenSquareIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { FC, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -35,6 +36,9 @@ const UpdateFormDocking: FC<UpdateFormProps> = ({
     departamento: "",
     observaciones: "",
   });
+
+  const session = useSession();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,7 +69,7 @@ const UpdateFormDocking: FC<UpdateFormProps> = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const result = await UpdateDockings(dockingData.id, dockingData);
+      const result = await UpdateDockings(dockingData.id, dockingData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);
@@ -163,7 +167,7 @@ const UpdateFormDocking: FC<UpdateFormProps> = ({
               Close
             </Button>
           </DialogClose>
-            <Button type="submit" className="relative left-[120px]">Actualizar Usuario</Button>
+            <Button type="submit" className="relative left-[120px]">Actualizar Docking</Button>
           </DialogFooter>
         </form>
       </DialogContent>

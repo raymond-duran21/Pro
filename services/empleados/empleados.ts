@@ -6,14 +6,24 @@ if (!apiUrl) throw new Error("NEXT_PUBLIC_API_URL is not defined");
 
 
 export const CreateEmpleado = async (
-    data: CreateEmpleados
+    data: CreateEmpleados,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.post(
         `${apiUrl}/Empleados`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -50,14 +60,24 @@ export const getEmpleadosById = async (
 
 export const UpdateEmpleados = async (
     id: Number,
-    data: UpdateEmpleado
+    data: UpdateEmpleado,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.patch(
         `${apiUrl}/Empleados/${id}`,
         {
             ...data,
+        },
+        {
+            headers,
         }
       );
 
@@ -68,12 +88,19 @@ export const UpdateEmpleados = async (
 };
 
 export const DeleteEmpleados = async (
-    id: Number
+    id: Number,
+    token: string | undefined
 ) => {
+
+    if (!token) return;
+
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
 
     try{ 
       const result = await axios.delete(
-        `${apiUrl}/Empleados/${id}`
+        `${apiUrl}/Empleados/${id}`,{headers}
       );
 
       return result.data;

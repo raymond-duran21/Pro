@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { CreateEmpleado } from "@/services/empleados/empleados";
 import { CreateEmpleados, Empleados } from "@/types/indes";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -29,6 +30,7 @@ const CreateFormEmpleados: FC<CreateFormProps> = () => {
     puesto: "",
     departamento: "",
   });
+  const session = useSession();
 
   
   const [isOpen, setIsOpen] = useState(false);
@@ -43,7 +45,7 @@ const CreateFormEmpleados: FC<CreateFormProps> = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const result = await CreateEmpleado(empleadoData);
+      const result = await CreateEmpleado(empleadoData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);

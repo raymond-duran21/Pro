@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label"
 import { CreateDockings } from "@/services/equipos/docking";
 import { CreateEquipos } from "@/services/equipos/equipos";
 import { CreateDocking, CreateEquipo } from "@/types/indes";
+import { useSession } from "next-auth/react";
 import { FC, useState } from "react";
 import * as React from "react"
 import { toast } from 'react-toastify';
@@ -37,6 +38,8 @@ const CreateFormDockings: FC<CreateFormProps> = () => {
     observaciones: "",
     estado:"",
   });
+  const session = useSession();
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDockingsData({
@@ -55,7 +58,7 @@ const CreateFormDockings: FC<CreateFormProps> = () => {
     event.preventDefault();
 
     try {
-      const result = await CreateDockings(dockingsData);
+      const result = await CreateDockings(dockingsData, session.data?.accessToken);
       if (result.flag === false) {
         toast.error(result.message);
         console.log(result.message);
